@@ -3,6 +3,7 @@ import config
 import random
 import runSD
 import json
+import requests
 
 
 intents = discord.Intents.all()
@@ -23,6 +24,18 @@ async def on_message(message):
     if message.channel.name == 'prompt':
         if message.author == client.user:
             return
+        if message.content.startswith('!loras'):
+            url = 'http://192.168.2.135:7860/sdapi/v1/loras'
+            response = requests.get(url, headers={'accept': 'application/json'})
+        
+            if response.status_code == 200:
+                loras = response.json()
+                loras_aliases = [f"<lora:{lora['alias']}:1>" for lora in loras]
+                await message.channel.send('\n'.join(loras_aliases))
+            else:
+                await message.channel.send('Failed to retrieve LoRAs.')
+            return
+
         new_prompt = message.content
         try:
             with open('Imgsetting.json', 'r+') as file:
@@ -77,6 +90,14 @@ async def on_message(message):
 
     #sampler
     if message.channel.name == 'sampler':
+        if "?" in message.content.lower():#プロパティの照会
+            url = 'http://192.168.2.135:7860/sdapi/v1/samplers'
+            headers = {'accept': 'application/json'}
+
+            response = requests.get(url, headers=headers)
+            data = response.json()
+            await message.channel.send(data)
+            return
         if message.author == client.user:
             return
         new_sampler = message.content
@@ -152,6 +173,17 @@ async def on_message(message):
 
     #checkpoint
     if message.channel.name == 'checkpoint':
+        if "?" in message.content.lower():
+            url = 'http://localhost:7860/sdapi/v1/sd-models'
+            headers = {'accept': 'application/json'}
+            response = requests.get(url, headers=headers)
+            if response.status_code == 200:
+                data = response.json()
+                model_names = [item['model_name'] for item in data]
+                await message.channel.send("\n".join(model_names))
+            else:
+                await message.channel.send(f"Failed to retrieve data with status code {response.status_code}")
+            return
         if message.author == client.user:
             return
         new_checkpoint = message.content
@@ -167,12 +199,16 @@ async def on_message(message):
         except Exception as e:
             await message.channel.send(f'エラーが発生しました: {e}')
 
-            
-    if client.user in message.mentions:
+
+    if message.channel.name == 'run':
+        if message.author == client.user:
+            return
         await message.channel.send("やるよ")
         runSD.Main()
         filepath ='/home/akira/bot/temp/output.png'
         await message.channel.send(file=discord.File(filepath))
+
+
 
 
 # Bot起動
