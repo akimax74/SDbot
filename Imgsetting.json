@@ -1,0 +1,11 @@
+{
+	"prompt": "(masterpiece:1.1),(best quality:1.0),(super fine cel anime:1.2),cute girl,blouse,no background,flat background",
+	"negative_prompt":"(worst quality, low quality:1.2),ugly,error,lowres,blurry,multipul angle, split view, grid view,text,signature,watermark,bad anatomy",
+	"steps": 20,
+	"sampler_index":"DPM++ 2M Karras",
+	"width": 256,
+	"height": 384,
+	"cfg_scale": 7,
+	"seed": -1,
+    "sd_model_checkpoint": "sd_model名"
+	}
