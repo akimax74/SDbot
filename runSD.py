@@ -9,7 +9,7 @@ def Main():
         Imgsetting = json.load(f)
     
     # HTTP POSTリクエストを送信し、レスポンスを受け取ります
-    resp = requests.post(url='http://192.168.2.135:7860/sdapi/v1/txt2img', json=Imgsetting)
+    resp = requests.post(url='http://localhost:7860/sdapi/v1/txt2img', json=Imgsetting)
     
     # レスポンスのJSONデータを取得します
     response_json = resp.json()
