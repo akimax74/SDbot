@@ -25,7 +25,7 @@ async def on_message(message):
         if message.author == client.user:
             return
         if message.content.startswith('!loras'):
-            url = 'http://192.168.2.135:7860/sdapi/v1/loras'
+            url = 'http://localhost:7860/sdapi/v1/loras'
             response = requests.get(url, headers={'accept': 'application/json'})
         
             if response.status_code == 200:
@@ -91,7 +91,7 @@ async def on_message(message):
     #sampler
     if message.channel.name == 'sampler':
         if "?" in message.content.lower():#プロパティの照会
-            url = 'http://192.168.2.135:7860/sdapi/v1/samplers'
+            url = 'http://localhost:7860/sdapi/v1/samplers'
             headers = {'accept': 'application/json'}
 
             response = requests.get(url, headers=headers)
